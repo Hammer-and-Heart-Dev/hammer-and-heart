@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://blir70542amxk"]
+
+[ext_resource type="ArrayMesh" uid="uid://dmwou7q54kmyp" path="res://hammer.obj" id="1_nn80s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_snr3i"]
+size = Vector3(0.90094, 0.831116, 1.99615)
+
+[node name="Hammer" type="Node3D" groups=["weapon"]]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+
+[node name="Hammer" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_nn80s")
+
+[node name="Hitbox" type="Area3D" parent="." groups=["weapon"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.93952e-07, 1.90735e-06, -7.94729e-07)
+shape = SubResource("BoxShape3D_snr3i")
