@@ -15,16 +15,17 @@ func _input(event):
 	if event.is_action_pressed("Attack"):
 		attacking = true
 		anim["parameters/playback"].travel("Attack")
-		#$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.set_process(true)
+		$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.process_mode = Node.PROCESS_MODE_ALWAYS
 		
 	elif direction:
 		anim["parameters/playback"].travel("Walk")
 	else:
 		anim["parameters/playback"].travel("Idle")
 
+func _ready() -> void:
+	$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.process_mode = Node.PROCESS_MODE_DISABLED
+	
 func _physics_process(delta: float) -> void:
-	#if not attacking:
-		#$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.set_physics_process(false)
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -55,5 +56,5 @@ func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
 	#print(anim_name)
 	if anim_name == "Greatswordslash":
 		attacking = false
-		#$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.set_process(false)
+		$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.process_mode = Node.PROCESS_MODE_DISABLED
 		
