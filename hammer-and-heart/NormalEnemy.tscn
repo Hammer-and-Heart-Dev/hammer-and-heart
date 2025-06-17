@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dshveo18padkc"]
+
+[ext_resource type="Script" uid="uid://d0t0yg4a5x2sa" path="res://normal_enemy.gd" id="1_gg50b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iw6g1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gg50b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wibd4"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("1_gg50b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_iw6g1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_gg50b")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_wibd4")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="area_exited" from="Area3D" to="." method="_on_area_3d_area_exited"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
