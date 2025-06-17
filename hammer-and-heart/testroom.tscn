@@ -1,11 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://byoh6qpqjpm2n"]
+[gd_scene load_steps=6 format=3 uid="uid://byoh6qpqjpm2n"]
 
 [ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://player.tscn" id="1_rqkd3"]
-[ext_resource type="PackedScene" uid="uid://bnfnoyg06hag8" path="res://testenemy.tscn" id="2_5mk0f"]
+[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://NormalEnemy.tscn" id="2_aes75"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xwobt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6tpgf"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_aes75"]
+vertices = PackedVector3Array(-29.4162, 2.82584, -29.8828, -29.4162, 2.82584, 29.8672, 29.3338, 2.82584, 29.8672, 29.3338, 2.82584, -29.8828)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [node name="Testroom" type="Node3D"]
 
@@ -67,5 +71,16 @@ transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Player/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 0.93296, 0.35998, 0, -0.35998, 0.93296, 0, 1.22911, -2.1869)
 
-[node name="Enemy" parent="." instance=ExtResource("2_5mk0f")]
-transform = Transform3D(2.14538, 0, 0, 0, 2.14538, 0, 0, 0, 2.14538, 3.21062, 1.84835, 0)
+[node name="NormalEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_aes75")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.682215, 3.11347)
+player = NodePath("../Player")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.800223, 0, 0, 0, 0.934569, 0, -0.76807, 0)
+navigation_mesh = SubResource("NavigationMesh_aes75")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1.3378, 0, 0, 0, 0.411186, 0, 0, 0, 0.0935694, -0.019727, 1.05474, -0.0535465)
+visible = false
+use_collision = true
+size = Vector3(44.6949, 7.19336, 648.273)
