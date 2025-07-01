@@ -64,6 +64,7 @@ mesh = SubResource("BoxMesh_xwobt")
 skeleton = NodePath("../../Ground/MeshInstance3D")
 
 [node name="Player" parent="." instance=ExtResource("1_rqkd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6.81417, 2.73267)
