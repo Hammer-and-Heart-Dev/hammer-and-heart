@@ -1,0 +1,136 @@
+[gd_scene load_steps=18 format=3 uid="uid://df1c05shwwqqp"]
+
+[ext_resource type="Script" uid="uid://bb0t2ovl7wifo" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_rnp8w"]
+[ext_resource type="Script" uid="uid://cw22yurt5l74k" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="2_rwmrd"]
+[ext_resource type="Script" uid="uid://cg016dbe7gs1x" path="res://addons/beehave/nodes/composites/sequence.gd" id="3_a77la"]
+[ext_resource type="Script" uid="uid://x8wn03mu8pqk" path="res://Scripts/beehave/bh_get_enemy.gd" id="4_a77la"]
+[ext_resource type="Script" uid="uid://dorri1tul8gfx" path="res://addons/beehave/nodes/decorators/delayer.gd" id="4_qwjeg"]
+[ext_resource type="Script" uid="uid://dsf3a8vlolhx8" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="5_qwjeg"]
+[ext_resource type="Script" uid="uid://bpsj4pmoc6axo" path="res://Scripts/beehave/bh_set_destination.gd" id="5_usp1g"]
+[ext_resource type="Script" uid="uid://bf8lucycjy2pc" path="res://Scripts/beehave/bh_start_navigation.gd" id="6_cf4e0"]
+[ext_resource type="Script" uid="uid://8hn4kne15ac5" path="res://addons/beehave/nodes/composites/selector.gd" id="6_usp1g"]
+[ext_resource type="Script" uid="uid://we22430vcb44" path="res://addons/beehave/nodes/decorators/time_limiter.gd" id="7_0bcqx"]
+[ext_resource type="Script" uid="uid://d0pd0s6fmrejy" path="res://Scripts/beehave/bh_set_target.gd" id="7_cf4e0"]
+[ext_resource type="Script" uid="uid://08pas0a5l8yq" path="res://Scripts/beehave/bh_in_melee_range.gd" id="7_eo021"]
+[ext_resource type="Script" uid="uid://ciwctf8r3g3wg" path="res://Scripts/beehave/bh_wait_for_destination.gd" id="8_eo021"]
+[ext_resource type="Script" uid="uid://7kvrsqfoujw3" path="res://Scripts/beehave/bh_stop_navigation.gd" id="9_1bqkg"]
+[ext_resource type="Script" uid="uid://cqr4aqurpbaek" path="res://Scripts/beehave/bh_face_target.gd" id="9_77by6"]
+[ext_resource type="Script" uid="uid://cbnbvj8prv63i" path="res://addons/beehave/nodes/leaves/condition.gd" id="10_1bqkg"]
+[ext_resource type="Script" uid="uid://cv74jjdrwevpr" path="res://addons/beehave/nodes/leaves/action.gd" id="11_77by6"]
+
+[node name="SpiderBotEnemy" type="Node" node_paths=PackedStringArray("blackboard", "actor")]
+script = ExtResource("1_rnp8w")
+blackboard = NodePath("@Node@34812")
+actor = NodePath("")
+metadata/_custom_type_script = "uid://bb0t2ovl7wifo"
+
+[node name="SelectorReactiveComposite" type="Node" parent="."]
+script = ExtResource("2_rwmrd")
+metadata/_custom_type_script = "uid://cw22yurt5l74k"
+
+[node name="Combat" type="Node" parent="SelectorReactiveComposite"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="GetEnemy" type="Node" parent="SelectorReactiveComposite/Combat"]
+script = ExtResource("4_a77la")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="AlwaysSucceedDecorator" type="Node" parent="SelectorReactiveComposite/Combat"]
+script = ExtResource("5_qwjeg")
+metadata/_custom_type_script = "uid://dsf3a8vlolhx8"
+
+[node name="SelectorComposite" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator"]
+script = ExtResource("6_usp1g")
+metadata/_custom_type_script = "uid://8hn4kne15ac5"
+
+[node name="InRange" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="RotateTowards" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="InMeleeRange" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/RotateTowards"]
+script = ExtResource("7_eo021")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="TimeLimiterDecorator" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/RotateTowards"]
+script = ExtResource("7_0bcqx")
+metadata/_custom_type_script = "uid://we22430vcb44"
+
+[node name="FaceTarget" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/RotateTowards/TimeLimiterDecorator"]
+script = ExtResource("9_77by6")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="Attack" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="InCooldown" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/Attack"]
+script = ExtResource("10_1bqkg")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="Attack" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/Attack"]
+script = ExtResource("11_77by6")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="StartCooldown" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/InRange/Attack"]
+script = ExtResource("11_77by6")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="GoToEnemy" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="GetEnemy" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/GoToEnemy"]
+script = ExtResource("4_a77la")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="SetTarget" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/GoToEnemy"]
+script = ExtResource("7_cf4e0")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="StartNavigation" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/GoToEnemy"]
+script = ExtResource("6_cf4e0")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="TimeLimiterDecorator" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/GoToEnemy"]
+script = ExtResource("7_0bcqx")
+wait_time = 0.2
+metadata/_custom_type_script = "uid://we22430vcb44"
+
+[node name="WaitForDestination" type="Node" parent="SelectorReactiveComposite/Combat/AlwaysSucceedDecorator/SelectorComposite/GoToEnemy/TimeLimiterDecorator"]
+script = ExtResource("8_eo021")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="Idle" type="Node" parent="SelectorReactiveComposite"]
+script = ExtResource("4_qwjeg")
+wait_time = 3.0
+metadata/_custom_type_script = "uid://dorri1tul8gfx"
+
+[node name="SequenceComposite" type="Node" parent="SelectorReactiveComposite/Idle"]
+script = ExtResource("3_a77la")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="SetDestination" type="Node" parent="SelectorReactiveComposite/Idle/SequenceComposite"]
+script = ExtResource("5_usp1g")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="StartNavigation" type="Node" parent="SelectorReactiveComposite/Idle/SequenceComposite"]
+script = ExtResource("6_cf4e0")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="TimeLimiterDecorator" type="Node" parent="SelectorReactiveComposite/Idle/SequenceComposite"]
+script = ExtResource("7_0bcqx")
+wait_time = 3.0
+metadata/_custom_type_script = "uid://we22430vcb44"
+
+[node name="WaitForDestination" type="Node" parent="SelectorReactiveComposite/Idle/SequenceComposite/TimeLimiterDecorator"]
+script = ExtResource("8_eo021")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="StopNavigation" type="Node" parent="SelectorReactiveComposite/Idle/SequenceComposite"]
+script = ExtResource("9_1bqkg")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"

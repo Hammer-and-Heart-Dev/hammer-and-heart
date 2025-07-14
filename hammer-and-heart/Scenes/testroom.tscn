@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://byoh6qpqjpm2n"]
 
-[ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://player.tscn" id="1_rqkd3"]
-[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://NormalEnemy.tscn" id="2_aes75"]
+[ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://Scenes/Player.tscn" id="1_2fjlk"]
+[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://Scenes/TestEnemy.tscn" id="2_hbesj"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xwobt"]
 
@@ -63,21 +63,8 @@ shape = SubResource("BoxShape3D_6tpgf")
 mesh = SubResource("BoxMesh_xwobt")
 skeleton = NodePath("../../Ground/MeshInstance3D")
 
-[node name="Player" parent="." instance=ExtResource("1_rqkd3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6.81417, 2.73267)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Player/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.93296, 0.35998, 0, -0.35998, 0.93296, 0, 1.22911, -2.1869)
-
-[node name="NormalEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_aes75")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.682215, 3.11347)
-player = NodePath("../Player")
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.800223, 0, 0, 0, 0.934569, 0, -0.76807, 0)
+transform = Transform3D(0.912224, 0, 0, 0, 0.800223, 0, 0, 0, 0.874612, 0, -1.84234, 0)
 navigation_mesh = SubResource("NavigationMesh_aes75")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
@@ -85,3 +72,16 @@ transform = Transform3D(1.3378, 0, 0, 0, 0.411186, 0, 0, 0, 0.0935694, -0.019727
 visible = false
 use_collision = true
 size = Vector3(44.6949, 7.19336, 648.273)
+
+[node name="Player" parent="." instance=ExtResource("1_2fjlk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.332241, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6.81417, 2.73267)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Player/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.93296, 0.35998, 0, -0.35998, 0.93296, 0, 1.22911, -2.1869)
+
+[node name="TestEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_hbesj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10037, 20.3833)
+player = NodePath("../Player")

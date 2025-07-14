@@ -73,3 +73,9 @@ func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
 		attacking = false
 		$Node/Skeleton3D/WeaponAttachment/Hammer/Hitbox.process_mode = Node.PROCESS_MODE_DISABLED
 		
+
+
+func _on_attack_detector_area_entered(area: Area3D) -> void:
+	if(area.is_in_group("enemy_attack")):
+		print("Player was hit.")
+	pass # Replace with function body.

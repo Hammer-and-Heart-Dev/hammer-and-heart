@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://dshveo18padkc"]
+
+[ext_resource type="Script" uid="uid://d0t0yg4a5x2sa" path="res://Scripts/normal_enemy.gd" id="1_106dn"]
+[ext_resource type="Script" uid="uid://fp6soaw5v5d4" path="res://Scripts/npc_senses.gd" id="2_8o1sk"]
+[ext_resource type="PackedScene" uid="uid://df1c05shwwqqp" path="res://Scenes/beehave/TestEnemy.tscn" id="2_agoen"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_agoen"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iw6g1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gg50b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wibd4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_agoen"]
+size = Vector3(0.439209, 1, 0.271362)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_agoen"]
+radius = 11.0226
+
+[node name="TestEnemy" type="RigidBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_agoen")
+script = ExtResource("1_106dn")
+enable_slide = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_iw6g1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_gg50b")
+
+[node name="Hitbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("BoxShape3D_wibd4")
+
+[node name="Attack" type="Area3D" parent="." groups=["enemy_attack"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+shape = SubResource("BoxShape3D_agoen")
+
+[node name="Senses" type="Area3D" parent="." node_paths=PackedStringArray("self_collider")]
+script = ExtResource("2_8o1sk")
+self_collider = NodePath("../Hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Senses"]
+shape = SubResource("SphereShape3D_agoen")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="BHTree" parent="." node_paths=PackedStringArray("blackboard", "actor") instance=ExtResource("2_agoen")]
+blackboard = NodePath("@Node@41668")
+actor = NodePath("..")
+
+[node name="Actions" type="Node3D" parent="."]
+
+[node name="Cooldown" type="Timer" parent="Actions"]
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_entered" from="Senses" to="Senses" method="_on_area_entered"]
+[connection signal="area_exited" from="Senses" to="Senses" method="_on_area_exited"]
