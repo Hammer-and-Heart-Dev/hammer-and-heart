@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://byoh6qpqjpm2n"]
 
 [ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://Scenes/Player.tscn" id="1_2fjlk"]
-[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://Scenes/SpiderBot.tscn" id="2_hbesj"]
+[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://Scenes/TestEnemy.tscn" id="2_hbesj"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xwobt"]
 
@@ -82,6 +82,6 @@ transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Player/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 0.93296, 0.35998, 0, -0.35998, 0.93296, 0, 1.22911, -2.1869)
 
-[node name="NormalEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_hbesj")]
+[node name="TestEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_hbesj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10037, 20.3833)
 player = NodePath("../Player")

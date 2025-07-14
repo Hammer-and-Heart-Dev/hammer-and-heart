@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0t0yg4a5x2sa" path="res://Scripts/normal_enemy.gd" id="1_106dn"]
 [ext_resource type="Script" uid="uid://fp6soaw5v5d4" path="res://Scripts/npc_senses.gd" id="2_8o1sk"]
-[ext_resource type="PackedScene" uid="uid://df1c05shwwqqp" path="res://Scenes/beehave/SpiderBotEnemy.tscn" id="2_agoen"]
+[ext_resource type="PackedScene" uid="uid://df1c05shwwqqp" path="res://Scenes/beehave/TestEnemy.tscn" id="2_agoen"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_agoen"]
 
@@ -18,7 +18,7 @@ size = Vector3(0.439209, 1, 0.271362)
 [sub_resource type="SphereShape3D" id="SphereShape3D_agoen"]
 radius = 11.0226
 
-[node name="SpiderBot" type="RigidBody3D"]
+[node name="TestEnemy" type="RigidBody3D"]
 physics_material_override = SubResource("PhysicsMaterial_agoen")
 script = ExtResource("1_106dn")
 enable_slide = true
@@ -49,8 +49,9 @@ shape = SubResource("SphereShape3D_agoen")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
-[node name="BHTree" parent="." node_paths=PackedStringArray("blackboard") instance=ExtResource("2_agoen")]
-blackboard = NodePath("@Node@24491")
+[node name="BHTree" parent="." node_paths=PackedStringArray("blackboard", "actor") instance=ExtResource("2_agoen")]
+blackboard = NodePath("@Node@41668")
+actor = NodePath("..")
 
 [node name="Actions" type="Node3D" parent="."]
 

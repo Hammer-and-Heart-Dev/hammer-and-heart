@@ -1,4 +1,4 @@
-class_name SpiderBotAgent
+class_name TestEnemyAgent
 extends Agent
 
 var COOL_DOWN_SECONDS = 2;

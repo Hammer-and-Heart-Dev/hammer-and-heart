@@ -15,9 +15,6 @@ class_name Agent
 @export var slide_friction := 1
 @export var normal_friction := 0.5
 
-# Uses a ground check child node to check for the floor, more accurate
-@export var use_groundcheck : bool = false
-
 # Only used if GroundCheck is disabled
 @export var floor_layer_mask := 0b0001 ## This is in Binary
 
@@ -32,30 +29,16 @@ class_name Agent
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
-#@export var damageable : AgentDamageable
-
-#@onready var timer : Timer = $Actions/Timer
 @onready var cooldown : Timer = $Actions/Cooldown
-#@onready var secondary_cooldown : Timer = $Actions/SecondaryCooldown
-# manages all code run when the enemy is dead because the rest of the enemy will not be processed.
-#@onready var death_helper : Timer = $DeathHelper 
-
-#@onready var actions : NPCActions = $Actions
 
 @onready var bh_tree : BeehaveTree = $BHTree
 
 @onready var senses : NPCSenses = $Senses
 
-#@onready var anim_tree = $AnimationTree
-#@onready var anim_sm = anim_tree["parameters/playback"]
-
 @onready var start_path_desired_distance = nav_agent.path_desired_distance
 
 @onready var start_position : Vector3 = global_position
 
-
-# - does not do anything in this script but may be used by the behavior tree
-#   to keep track of things like the crab being in its shell
 var is_idle := false
 
 var enable_navigation := true
@@ -64,10 +47,6 @@ var current_speed : float
 
 var near_obstacle : bool = false
 var obstacle_distance : Vector3
-
-# because near obstacle cannot detect walls and other things, this uses the StaticRaycast, if
-# implimented. This is used by bh_is_obstacle_close to detect if you are against a wall or object
-var wall_raycast_collided : bool = false
 
 var is_alive := true
 
@@ -102,10 +81,6 @@ var nav_force : Vector3
 
 @onready var initial_linear_damp : float = linear_damp
 
-#func _ready():
-	#if use_groundcheck:
-		#ground_check = $GroundCheck
-#
 
 func _physics_process(_delta):
 
@@ -116,7 +91,6 @@ func _physics_process(_delta):
 
 	if !is_alive:
 		return
-	#_is_on_ground()
 	
 	if custom_gravity != Vector3.ZERO:
 		gravity = custom_gravity
@@ -128,12 +102,6 @@ func _physics_process(_delta):
 		if custom_gravity.y > 0:
 			gravity_scale = 0.0
 		
-
-	# if you are on the ground and naviation is enabled do navigation, if on the ground and no navigation, do slide if enabled
-	#if actions.action_in_progress:
-		#actions.action_process.emit()
-		
-	#if enable_navigation and on_ground:
 	if enable_navigation:
 			
 		physics_material_override.set("friction", normal_friction)
@@ -160,14 +128,6 @@ func _physics_process(_delta):
 	linear_velocity += gravity * _delta
 	
 	last_frame_velocity = linear_velocity
-
-func _integrate_forces(_state):
-	pass
-	# setup that follows godots rules of dont modify linear velocity during physics_update
-	# works for now without this so im not using it
-	#if temp_veloc is Vector3:
-	#	linear_velocity = temp_veloc
-	#	temp_veloc = null
 
 func apply_nav_velocity(safe_velocity: Vector3):
 	# make sure linear velocity cannot be more than movement speed
@@ -208,7 +168,6 @@ func set_target(_target: Vector3):
 
 	# get the nav map and then find the closest point on the map to the slime target
 	var map = nav_agent.get_navigation_map()
-	#await get_tree().process_frame
 	var _navmesh_pos = NavigationServer3D.map_get_closest_point(map, _pos)
 
 	nav_agent.target_position = _navmesh_pos
@@ -223,44 +182,11 @@ func is_at_destination() -> bool:
 	else:
 		return false
 
-#func anim_travel(_s : StringName):
-	#anim_sm.travel(_s)
-
-#func on_hit(_enable_knockback : bool = true):
-	#actions.hit_action()
-
-
-#func toggle_damageable(_d : bool):
-	#if _d == true:
-		#damageable.active = true
-	#else:
-		#damageable.active = false
-
 func is_moving() -> bool:
 	if Vector2(linear_velocity.z, linear_velocity.x).length() >= 0.1:
 		return true
 	else:
 		return false
-
-func die():
-	#actions.a_action_ended()
-	# if you are already dead, dont run this again
-	if !is_alive:
-		return
-	is_alive = false
-	freeze = true
-	collision_layer = 0
-	collision_mask = 0
-	#anim_sm.start("die")
-
-	# disable all important things that run
-	bh_tree.process_mode = Node.PROCESS_MODE_DISABLED
-	nav_agent.process_mode = Node.PROCESS_MODE_DISABLED
-	#actions.process_mode = Node.PROCESS_MODE_DISABLED
-	#senses.process_mode = Node.PROCESS_MODE_DISABLED
-	#damageable.process_mode = Node.PROCESS_MODE_DISABLED
-	#if death_helper != null:
-		#death_helper.begin()
 
 func force_avoid_obstacle():
 	near_obstacle = true
@@ -272,9 +198,6 @@ func is_rotate_complete() -> bool:
 	
 	var _b : Transform3D = global_transform.looking_at(rotate_target)
 	
-	# from StackOverflow user Theraot
-	# https://stackoverflow.com/questions/71376004/how-to-get-euler-angles-from-two-transforms-in-godot
-	# gets the difference between the current angle and the desired angle
 	var a := global_transform.basis.get_rotation_quaternion()
 	var b := _b.basis.get_rotation_quaternion()
 	var r := a.inverse() * b
@@ -302,26 +225,6 @@ func start_secondary_cooldown(_time : float):
 
 
 ### --- Interal Functions --- ###
-
-# sets on_ground
-func _is_on_ground():
-	
-	if use_groundcheck:
-		if ground_check.is_colliding():
-			on_ground = true
-			return
-	else:
-		var _bodies = get_colliding_bodies()
-		for _b in _bodies:
-			if _b.collision_layer == floor_layer_mask:
-				# if you are moving very fast vertically, do not accept that you are on the ground. this prevents some times you would clip through the ground
-				if linear_velocity.y < ground_detection_sensitivity:
-					if !on_ground:
-						_calc_fall_damage()
-					on_ground = true
-					return
-					
-	on_ground = false
 
 func _navigate(_delta):
 
@@ -429,20 +332,6 @@ func _cooldown_complete():
 
 func _seconday_cooldown_complete():
 	in_secondary_cooldown = false
-
-func _calc_fall_damage(from_zero : bool = false):
-	
-	var _current_veloc
-	if from_zero:
-		_current_veloc = Vector3.ZERO
-	else:
-		_current_veloc = linear_velocity
-	
-	var _y = abs(last_frame_velocity.y - _current_veloc.y)
-	#if _y > fall_damage_floor:
-		#var _d : AttackObject = AttackObject.new()
-		#_d.damage = roundi(_y * fall_damage_multiplier)
-		#damageable.damaged(_d)
 
 func _nav_unstuck():
 	# you cant set a target while unstuck is active so turn it off
