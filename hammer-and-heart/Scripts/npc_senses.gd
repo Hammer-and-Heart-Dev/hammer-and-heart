@@ -15,7 +15,7 @@ func _process(_delta):
 
 func _on_area_entered(area):
 	if area.is_in_group("player"):
-		print("Enemy sees player")
+		#print("Enemy sees player")
 		current_enemies.append(area)
 
 

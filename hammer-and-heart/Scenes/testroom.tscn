@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://byoh6qpqjpm2n"]
 
-[ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://Scenes/Player.tscn" id="1_2fjlk"]
-[ext_resource type="PackedScene" uid="uid://dshveo18padkc" path="res://Scenes/TestEnemy.tscn" id="2_hbesj"]
+[ext_resource type="PackedScene" uid="uid://dny2sb340px7g" path="res://Scenes/Player.tscn" id="1_of60j"]
+[ext_resource type="PackedScene" uid="uid://8u5hyktpg08f" path="res://Scenes/Annabelle.tscn" id="2_elpuk"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xwobt"]
 
@@ -73,7 +73,7 @@ visible = false
 use_collision = true
 size = Vector3(44.6949, 7.19336, 648.273)
 
-[node name="Player" parent="." instance=ExtResource("1_2fjlk")]
+[node name="Player" parent="." instance=ExtResource("1_of60j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.332241, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
@@ -82,6 +82,7 @@ transform = Transform3D(1, 0, 0, 0, 0.35998, 0.93296, 0, -0.93296, 0.35998, 0, 6
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Player/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 0.93296, 0.35998, 0, -0.35998, 0.93296, 0, 1.22911, -2.1869)
 
-[node name="TestEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_hbesj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10037, 20.3833)
+[node name="Annabelle" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_elpuk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.365369, -1.85131)
 player = NodePath("../Player")
+distance_to_player = 3
