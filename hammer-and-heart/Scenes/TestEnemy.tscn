@@ -50,7 +50,7 @@ shape = SubResource("SphereShape3D_agoen")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [node name="BHTree" parent="." node_paths=PackedStringArray("blackboard", "actor") instance=ExtResource("2_agoen")]
-blackboard = NodePath("@Node@41668")
+blackboard = NodePath("@Node@21797")
 actor = NodePath("..")
 
 [node name="Actions" type="Node3D" parent="."]

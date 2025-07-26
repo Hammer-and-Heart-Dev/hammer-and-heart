@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=3 uid="uid://k11k2q6l2d8i"]
+
+[ext_resource type="Script" uid="uid://bb0t2ovl7wifo" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_0cvol"]
+[ext_resource type="Script" uid="uid://cg016dbe7gs1x" path="res://addons/beehave/nodes/composites/sequence.gd" id="2_30u70"]
+[ext_resource type="Script" uid="uid://8hn4kne15ac5" path="res://addons/beehave/nodes/composites/selector.gd" id="2_t31lv"]
+[ext_resource type="Script" uid="uid://257n4thamas5" path="res://Scripts/beehave/bh_in_range.gd" id="3_t31lv"]
+[ext_resource type="Script" uid="uid://dsf3a8vlolhx8" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="4_akeg1"]
+[ext_resource type="Script" uid="uid://dymjhjt0mjqnd" path="res://Scripts/beehave/bh_follower_set_target.gd" id="5_30u70"]
+[ext_resource type="Script" uid="uid://bf8lucycjy2pc" path="res://Scripts/beehave/bh_start_navigation.gd" id="6_nesyp"]
+[ext_resource type="Script" uid="uid://we22430vcb44" path="res://addons/beehave/nodes/decorators/time_limiter.gd" id="7_germw"]
+[ext_resource type="Script" uid="uid://ciwctf8r3g3wg" path="res://Scripts/beehave/bh_wait_for_destination.gd" id="8_v6b8l"]
+
+[node name="Annabelle" type="Node" node_paths=PackedStringArray("blackboard", "actor")]
+script = ExtResource("1_0cvol")
+blackboard = NodePath("@Node@21799")
+actor = NodePath("")
+metadata/_custom_type_script = "uid://bb0t2ovl7wifo"
+
+[node name="Follow" type="Node" parent="."]
+script = ExtResource("2_t31lv")
+metadata/_custom_type_script = "uid://8hn4kne15ac5"
+
+[node name="InRange" type="Node" parent="Follow"]
+script = ExtResource("3_t31lv")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
+
+[node name="AlwaysSucceedDecorator" type="Node" parent="Follow"]
+script = ExtResource("4_akeg1")
+metadata/_custom_type_script = "uid://dsf3a8vlolhx8"
+
+[node name="GoToPlayer" type="Node" parent="Follow/AlwaysSucceedDecorator"]
+script = ExtResource("2_30u70")
+metadata/_custom_type_script = "uid://cg016dbe7gs1x"
+
+[node name="SetTarget" type="Node" parent="Follow/AlwaysSucceedDecorator/GoToPlayer"]
+script = ExtResource("5_30u70")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="StartNavigation" type="Node" parent="Follow/AlwaysSucceedDecorator/GoToPlayer"]
+script = ExtResource("6_nesyp")
+metadata/_custom_type_script = "uid://cv74jjdrwevpr"
+
+[node name="TimeLimiterDecorator" type="Node" parent="Follow/AlwaysSucceedDecorator/GoToPlayer"]
+script = ExtResource("7_germw")
+wait_time = 0.2
+metadata/_custom_type_script = "uid://we22430vcb44"
+
+[node name="WaitForDestination" type="Node" parent="Follow/AlwaysSucceedDecorator/GoToPlayer/TimeLimiterDecorator"]
+script = ExtResource("8_v6b8l")
+metadata/_custom_type_script = "uid://cbnbvj8prv63i"
